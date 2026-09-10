@@ -47,6 +47,7 @@ h1{font-size:20px;margin:0}.back{font-size:12px;color:var(--muted);text-decorati
 <div class="actions"><button id="exportBtn" class="smallbtn">📋 データをコピー</button><button id="clearBtn" class="smallbtn">🗑 全履歴を削除</button></div>
 <div class="note">起動時は当日表示。カレンダーの日付をタップすると上の集計がその日に切り替わります。「週」は選択日を含む週の集計で、回転数だけ1日平均を表示します。</div>
 </div>
+<div id="recordEditModal" class="editmodal"><div class="editbox"><h3>✏️ 稼働データ編集</h3><div class="editgrid"><div class="editfield wide"><label>店名</label><input id="editStore"></div><div class="editfield wide"><label>機種名</label><input id="editMachine"></div><div class="editfield"><label>回転数</label><input id="editGames" inputmode="numeric"></div><div class="editfield"><label>期待値</label><input id="editEv" inputmode="numeric"></div><div class="editfield wide"><label>収支</label><input id="editProfit" inputmode="numeric"></div></div><div class="editactions"><button id="editCancel" class="editcancel">キャンセル</button><button id="editSave" class="editsave">まとめて保存</button></div></div></div>
 <script>
 const KEY="slot_dashboard_records_v1";
 const SALARY_KEY="slot_dashboard_salary_v1";
@@ -239,7 +240,10 @@ $("exportBtn").onclick=async()=>{const s=JSON.stringify({records:rows(),salary:s
 $("clearBtn").onclick=()=>{if(confirm("保存されている稼働履歴をすべて削除しますか？")){localStorage.removeItem(KEY);localStorage.removeItem(SALARY_KEY);selected="";$("details").innerHTML='<div class="emptymsg">履歴はありません</div>';render()}};
 selected=new Date().toLocaleDateString("sv-SE");
 setSelectedDate(selected);
-$("editCancel").onclick=closeRecordEditor;$("editSave").onclick=saveRecordEditor;$("recordEditModal").onclick=e=>{if(e.target===$("recordEditModal"))closeRecordEditor()};
+const editCancelBtn=$("editCancel"), editSaveBtn=$("editSave"), editModal=$("recordEditModal");
+if(editCancelBtn) editCancelBtn.onclick=closeRecordEditor;
+if(editSaveBtn) editSaveBtn.onclick=saveRecordEditor;
+if(editModal) editModal.onclick=e=>{if(e.target===editModal)closeRecordEditor()};
 render();
 showDay(selected,rows().filter(r=>localDay(r)===selected));
-</script><div id="recordEditModal" class="editmodal"><div class="editbox"><h3>✏️ 稼働データ編集</h3><div class="editgrid"><div class="editfield wide"><label>店名</label><input id="editStore"></div><div class="editfield wide"><label>機種名</label><input id="editMachine"></div><div class="editfield"><label>回転数</label><input id="editGames" inputmode="numeric"></div><div class="editfield"><label>期待値</label><input id="editEv" inputmode="numeric"></div><div class="editfield wide"><label>収支</label><input id="editProfit" inputmode="numeric"></div></div><div class="editactions"><button id="editCancel" class="editcancel">キャンセル</button><button id="editSave" class="editsave">まとめて保存</button></div></div></div></body></html>
+</script></body></html>
